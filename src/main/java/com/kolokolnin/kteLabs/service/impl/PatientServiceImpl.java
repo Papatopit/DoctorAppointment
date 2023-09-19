@@ -5,18 +5,21 @@ import com.kolokolnin.kteLabs.model.Patient;
 import com.kolokolnin.kteLabs.repo.PatientRepository;
 import com.kolokolnin.kteLabs.service.PatientService;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 @AllArgsConstructor
+@Slf4j
 public class PatientServiceImpl implements PatientService {
 
     private final PatientRepository patientRepository;
 
     @Override
     public Patient createPatient(Patient patient) {
+        log.info("Patient is created and save in DB");
         return patientRepository.save(patient);
     }
 
@@ -32,6 +35,7 @@ public class PatientServiceImpl implements PatientService {
         if (patient.getDateOfBirth() != null) {
             oldPatient.setDateOfBirth(patient.getDateOfBirth());
         }
+        log.info("Update Patient success");
         return patientRepository.save(oldPatient);
     }
 
@@ -40,6 +44,7 @@ public class PatientServiceImpl implements PatientService {
         if (!patientRepository.existsById(id)) {
             throw new NotFoundException("Patient not found");
         }
+        log.info("Delete by ID Patient success");
         patientRepository.deleteById(id);
     }
 
@@ -51,6 +56,7 @@ public class PatientServiceImpl implements PatientService {
 
     @Override
     public List<Patient> getAllPatients() {
+        log.info("Find ALL Patient success");
         return patientRepository.findAll();
     }
 }

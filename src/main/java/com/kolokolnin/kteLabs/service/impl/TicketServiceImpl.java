@@ -9,6 +9,7 @@ import com.kolokolnin.kteLabs.repo.PatientRepository;
 import com.kolokolnin.kteLabs.repo.TicketRepository;
 import com.kolokolnin.kteLabs.service.TicketService;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 
@@ -18,6 +19,7 @@ import java.util.List;
 
 @Service
 @AllArgsConstructor
+@Slf4j
 public class TicketServiceImpl implements TicketService {
 
     private final TicketRepository ticketRepository;
@@ -29,6 +31,7 @@ public class TicketServiceImpl implements TicketService {
         if (!ticketRepository.existsById(id)) {
             throw new NotFoundException("Ticket not found");
         }
+        log.info("Delete by ID Ticket success");
         ticketRepository.deleteById(id);
     }
 
@@ -40,6 +43,7 @@ public class TicketServiceImpl implements TicketService {
 
     @Override
     public List<Ticket> getAllTickets() {
+        log.info("Find ALL Ticket success");
         return ticketRepository.findAll();
     }
 
@@ -48,6 +52,7 @@ public class TicketServiceImpl implements TicketService {
         if (!patientRepository.existsById(id)) {
             throw new NotFoundException("Patient not found");
         }
+        log.info("Find ALL Ticket By Patient Id success");
         return ticketRepository.findByPatientId(id);
     }
 
@@ -56,11 +61,13 @@ public class TicketServiceImpl implements TicketService {
         if (!doctorRepository.existsById(id)) {
             throw new NotFoundException("Doctor not found");
         }
+        log.info("Find ALL free Ticket By Doctor Id success");
         return ticketRepository.findByDoctorIdAndPatientIsNull(id);
     }
 
     @Override
     public List<Ticket> getAllTicketsByReceptionTimeIsBetween(LocalDateTime start, LocalDateTime end) {
+        log.info("get All Tickets By Reception Time Is Between {}, {}", start, end);
         return ticketRepository.findByReceptionStartTimeIsAfterAndReceptionEndTimeIsBefore(start.minusSeconds(1),
                 end.plusSeconds(1));
     }
@@ -87,7 +94,7 @@ public class TicketServiceImpl implements TicketService {
     @Override
     public Ticket takeTicketByPatient(long patientId, long ticketId) {
         Ticket ticket = ticketRepository.findById(ticketId)
-                .orElseThrow(() -> new NotFoundException("Coupon not found"));
+                .orElseThrow(() -> new NotFoundException("Ticket not found"));
         if (ticket.getPatient() != null) {
             throw new ConflictException("Ticket already taken");
         }
