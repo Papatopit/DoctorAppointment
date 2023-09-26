@@ -1,0 +1,20 @@
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           targetNamespace="http://ktelabs.ws/schedule" elementFormDefault="qualified">
+
+    <xs:element name="createScheduleRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="doctorId" type="xs:int"/>
+                <xs:element name="scheduleStartTime" type="xs:dateTime"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="createScheduleResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="status" type="xs:string"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>
